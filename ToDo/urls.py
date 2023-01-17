@@ -19,5 +19,6 @@ from ToDoApp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('singnup/', views.signupuser, name='signupuser')
+    path('signup/', views.signupuser, name='signupuser'),
+    path('todos/', views.current_todos, name='current_todos')
 ]

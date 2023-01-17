@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.contrib.auth import login
+from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 
 
 def signupuser(request):
@@ -8,7 +10,18 @@ def signupuser(request):
         return render(request, 'ToDoApp/signupuser.html', context={'form': UserCreationForm()})
     elif request.method == 'POST':
         if request.POST['password1'] == request.POST['password2']:
-            user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
-            user.save()
+            try:
+                user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
+                user.save()
+            except IntegrityError:
+                return render(request, 'ToDoApp/signupuser.html', context={'form': UserCreationForm(),
+                                                                           'error': 'This username is already exist'})
+            login(request, user)
+            return redirect('current_todos')
         else:
-            print('password does not equals')
+            return render(request, 'ToDoApp/signupuser.html', context={'form': UserCreationForm(),
+                                                                       'error': 'Passwords did not match'})
+
+
+def current_todos(request):
+    return render(request, 'ToDoApp/current_todos.html')
