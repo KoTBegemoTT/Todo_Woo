@@ -1,8 +1,17 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+
+
+def home(request):
+    return render(request, 'ToDoApp/home.html')
+
+
+def logout_user(request):
+    logout(request)
+    return render(request, 'ToDoApp/home.html')
 
 
 def signupuser(request):
