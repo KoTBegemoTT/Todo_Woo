@@ -9,4 +9,4 @@ class Todo(models.Model):
     memo = TextField(blank=True)
     created = DateTimeField(auto_now_add=True)
     important = BooleanField(default=False)
-    date_completion = DateTimeField(null=True)
+    date_completion = DateTimeField(null=True, blank=True)
