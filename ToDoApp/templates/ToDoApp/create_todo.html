@@ -8,6 +8,9 @@
 {% extends 'ToDoApp\base.html' %}
 
 {% block content %}
+{% if error %}
+<h1>{{error}}</h1>
+{% endif %}
 <h1>Create todo</h1>
 <form method="POST">
     {% csrf_token %}

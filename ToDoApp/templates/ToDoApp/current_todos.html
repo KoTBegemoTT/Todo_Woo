@@ -6,10 +6,19 @@
 </head>
 <body>
 {% extends 'ToDoApp\base.html' %}
-
 {% block content%}
 CurrentTodos
-
+<br>
+<ul>
+    {% for todo in todos%}
+    {% if todo.important %}<b style="color:blue">{% endif %}
+    <li>
+        {{todo.title}}
+        {% if todo.memo %} - {{todo.memo}}{% endif %}
+    </li>
+    {% if todo.important %}</b>{% endif %}
+    {% endfor %}
+</ul>
 {% endblock %}
 </body>
 </html>

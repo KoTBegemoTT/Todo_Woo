@@ -60,8 +60,10 @@ def create_todo(request):
             new_todo.save()
             return redirect('current_todos')
         else:
-            print('NOOOOOOOOO')
+            return render(request, 'ToDoApp/create_todo.html',
+                          context={'form': TodoForm(), 'error': 'Bad data inputed'})
 
 
 def current_todos(request):
-    return render(request, 'ToDoApp/current_todos.html')
+    todos = Todo.objects.filter(user=request.user)
+    return render(request, 'ToDoApp/current_todos.html', context={'todos': todos})
