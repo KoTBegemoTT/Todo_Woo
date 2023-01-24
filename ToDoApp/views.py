@@ -1,5 +1,5 @@
 from django.contrib.auth import login, logout, authenticate
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
@@ -65,5 +65,20 @@ def create_todo(request):
 
 
 def current_todos(request):
-    todos = Todo.objects.filter(user=request.user)
+    todos = Todo.objects.filter(user=request.user, date_completion__isnull=True)
     return render(request, 'ToDoApp/current_todos.html', context={'todos': todos})
+
+
+def view_todo(request, pk):
+    todo = get_object_or_404(Todo, id=pk, user=request.user)
+    form = TodoForm(instance=todo)
+    if request.method == 'GET':
+        return render(request, 'ToDoApp/current_todo.html', context={'todo': todo, 'form': form})
+    elif request.method == 'POST':
+        todo = TodoForm(request.POST, instance=todo)
+        if todo.is_valid():
+            todo.save()
+            return render(request, 'ToDoApp/current_todo.html', context={'todo': todo, 'form': todo})
+        else:
+            return render(request, 'ToDoApp/current_todo.html',
+                          context={'todo': todo, 'form': todo, 'error': 'bad info'})

@@ -11,12 +11,15 @@ CurrentTodos
 <br>
 <ul>
     {% for todo in todos%}
-    {% if todo.important %}<b style="color:blue">{% endif %}
-    <li>
-        {{todo.title}}
-        {% if todo.memo %} - {{todo.memo}}{% endif %}
-    </li>
-    {% if todo.important %}</b>{% endif %}
+    <a href="{% url 'view_todo' todo.id %}">
+        <li>
+            {% if todo.important %}<b style="color:blue">{% endif %}
+            {{todo.title}}
+            {% if todo.memo %} - {{todo.memo}}{% endif %}
+            {% if todo.important %}</b>{% endif %}
+        </li>
+    </a>
+
     {% endfor %}
 </ul>
 {% endblock %}
