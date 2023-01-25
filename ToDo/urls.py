@@ -25,5 +25,6 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout_user'),
     path('todos/', views.current_todos, name='current_todos'),
     path('todos/<int:pk>', views.view_todo, name='view_todo'),
+    path('todos/<int:pk>/complete', views.complete_todo, name='complete_todo'),
     path('create/', views.create_todo, name='create_todo')
 ]
