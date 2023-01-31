@@ -70,23 +70,24 @@ def current_todos(request):
     return render(request, 'ToDoApp/current_todos.html', context={'todos': todos})
 
 
+def completed_todos(request):
+    todos = Todo.objects.filter(user=request.user, date_completion__isnull=False).order_by('date_completion')
+    return render(request, 'ToDoApp/completed_todos.html', context={'todos': todos})
+
+
 def view_todo(request, pk):
     todo = get_object_or_404(Todo, id=pk, user=request.user)
-    form = TodoForm(instance=todo)
     if request.method == 'GET':
-        return render(request, 'ToDoApp/current_todo.html', context={'todo': todo, 'form': form})
+        form = TodoForm(instance=todo)
+        return render(request, 'ToDoApp/current_todo.html', context={'todo_id': pk, 'form': form})
     elif request.method == 'POST':
-        return update_todo(request, todo)
-
-
-def update_todo(request, todo):
-    todo = TodoForm(request.POST, instance=todo)
-    if todo.is_valid():
-        todo.save()
-        return render(request, 'ToDoApp/current_todo.html', context={'todo': todo, 'form': todo})
-    else:
-        return render(request, 'ToDoApp/current_todo.html',
-                      context={'todo': todo, 'form': todo, 'error': 'bad info'})
+        form = TodoForm(request.POST, instance=todo)
+        if form.is_valid():
+            form.save()
+            return render(request, 'ToDoApp/current_todo.html', context={'todo_id': pk, 'form': form})
+        else:
+            return render(request, 'ToDoApp/current_todo.html',
+                          context={'todo_id': pk, 'form': form, 'error': 'bad info'})
 
 
 def complete_todo(request, pk):

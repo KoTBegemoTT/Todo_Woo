@@ -15,7 +15,7 @@ CurrentTodos
         <li>
             {% if todo.important %}<b style="color:red">{% endif %}
             {{todo.title}}
-            {% if todo.memo %} - {{todo.memo}}{% endif %}
+            {% if todo.date_completion %} - {{ todo.date_completion }}{% endif %}
             {% if todo.important %}</b>{% endif %}
         </li>
     </a>

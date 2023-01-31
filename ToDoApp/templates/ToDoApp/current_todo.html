@@ -14,11 +14,11 @@
     <button type="submit">Save</button>
 </form>
 
-<form method="POST" action="{% url 'complete_todo' todo.id %}">
+<form method="POST" action="{% url 'complete_todo' todo_id %}">
     {% csrf_token %}
     <button type="submit">Complete</button>
 </form>
-<form method="POST" action="{% url 'delete_todo' todo.id %}">
+<form method="POST" action="{% url 'delete_todo' todo_id %}">
     {% csrf_token %}
     <button type="submit">Delete</button>
 </form>
