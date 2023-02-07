@@ -13,7 +13,8 @@ def home(request):
 
 
 def logout_user(request):
-    logout(request)
+    if request.method == 'POST':
+        logout(request)
     return render(request, 'ToDoApp/home.html')
 
 
