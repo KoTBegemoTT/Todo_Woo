@@ -2,14 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>To do woo</title>
 </head>
 <body>
 {% extends 'ToDoApp\base.html' %}
 
 {% block content %}
-Home
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+        <h1>Simply Your Todos. Woo!</h1>
+        <p>Life is fun. But life is also busy. There's a million different things you could be doing. But what matters
+            is what you do. I created <b>Todo Woo</b> to help you make sense of all of your opportunities and live that life
+            that matters most to you. Your new organized life awaits.</p>
+        <a role="button" class="btn btn-lg btn-success" href="
+        {% if user.is_authenticated %}{% url 'current_todos'%}
+        {% else %}{% url 'signup_user' %}
+        {% endif %}">Start</a>
+    </div>
+</div>
 {% endblock %}
 </body>
 </html>

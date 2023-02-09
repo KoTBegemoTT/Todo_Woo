@@ -7,21 +7,27 @@
 <body>
 {% extends 'ToDoApp\base.html' %}
 {% block content%}
-CurrentTodos
-<br>
-<ul>
-    {% for todo in todos%}
-    <a href="{% url 'view_todo' todo.id %}">
-        <li>
-            {% if todo.important %}<b style="color:red">{% endif %}
-            {{todo.title}}
-            {% if todo.date_completion %} - {{ todo.date_completion }}{% endif %}
-            {% if todo.important %}</b>{% endif %}
-        </li>
-    </a>
-
-    {% endfor %}
-</ul>
+<div class="row justify-content-center mt-5">
+    <div class="col-md-9">
+        {% if todos %}
+        <h1>{{ todos.count }} Completed Todo{{todos.count|pluralize}}</h1>
+        {% else %}
+        <h1>Current todos</h1>
+        {% endif %}
+    </div>
+</div>
+<div class="row justify-content-center mt-4">
+    <div class="col-md-9">
+        <div class="list-group">
+            {% for todo in todos %}
+            <a href="{% url 'view_todo' todo.id %}" class="list-group-item
+                    list-group-item-action{% if todo.important %} list-group-item-danger{% endif %}">
+                <b>{{ todo.title }}</b> - {{ todo.date_completion}}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}
 </body>
 </html>

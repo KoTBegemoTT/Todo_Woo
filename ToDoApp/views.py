@@ -18,42 +18,37 @@ def logout_user(request):
     return render(request, 'ToDoApp/home.html')
 
 
-def signupuser(request):
+def signup_user(request):
     if request.method == 'GET':
-        return render(request, 'ToDoApp/signupuser.html', context={'form': UserCreationForm()})
+        return render(request, 'ToDoApp/signup_user.html')
     elif request.method == 'POST':
         if request.POST['password1'] == request.POST['password2']:
             try:
                 user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
                 user.save()
             except IntegrityError:
-                return render(request, 'ToDoApp/signupuser.html', context={'form': UserCreationForm(),
-                                                                           'error': 'This username is already exist'})
+                return render(request, 'ToDoApp/signup_user.html', context={'error': 'This username is already exist'})
             login(request, user)
             return redirect('current_todos')
         else:
-            return render(request, 'ToDoApp/signupuser.html', context={'form': UserCreationForm(),
-                                                                       'error': 'Passwords did not match'})
+            return render(request, 'ToDoApp/signup_user.html', context={'error': 'Passwords did not match'})
 
 
 def login_user(request):
     if request.method == 'GET':
-        return render(request, 'ToDoApp/login_user.html', context={'form': AuthenticationForm()})
+        return render(request, 'ToDoApp/login_user.html')
     elif request.method == 'POST':
-
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
         if user:
             login(request, user)
             return redirect('current_todos')
         else:
-            return render(request, 'ToDoApp/login_user.html', context={'form': AuthenticationForm(),
-
-                                                                       'error': 'Username and password did not math'})
+            return render(request, 'ToDoApp/login_user.html', context={'error': 'Username and password did not math'})
 
 
 def create_todo(request):
     if request.method == 'GET':
-        return render(request, 'ToDoApp/create_todo.html', context={'form': TodoForm()})
+        return render(request, 'ToDoApp/create_todo.html')
     elif request.method == 'POST':
         form = TodoForm(request.POST)
         if form.is_valid():
@@ -63,7 +58,7 @@ def create_todo(request):
             return redirect('current_todos')
         else:
             return render(request, 'ToDoApp/create_todo.html',
-                          context={'form': TodoForm(), 'error': 'Bad data inputed'})
+                          context={'error': 'Bad data inputed'})
 
 
 def current_todos(request):
@@ -79,16 +74,15 @@ def completed_todos(request):
 def view_todo(request, pk):
     todo = get_object_or_404(Todo, id=pk, user=request.user)
     if request.method == 'GET':
-        form = TodoForm(instance=todo)
-        return render(request, 'ToDoApp/current_todo.html', context={'todo_id': pk, 'form': form})
+        return render(request, 'ToDoApp/view_todo.html', context={'todo': todo})
     elif request.method == 'POST':
         form = TodoForm(request.POST, instance=todo)
         if form.is_valid():
             form.save()
-            return render(request, 'ToDoApp/current_todo.html', context={'todo_id': pk, 'form': form})
+            return redirect('current_todos')
         else:
-            return render(request, 'ToDoApp/current_todo.html',
-                          context={'todo_id': pk, 'form': form, 'error': 'bad info'})
+            return render(request, 'ToDoApp/view_todo.html',
+                          context={'todo': todo, 'error': 'bad info'})
 
 
 def complete_todo(request, pk):
@@ -103,4 +97,13 @@ def delete_todo(request, pk):
     if request.method == 'POST':
         todo = get_object_or_404(Todo, id=pk, user=request.user)
         todo.delete()
+        return redirect('current_todos')
+
+
+def repeat_todo(request, pk):
+    if request.method == 'POST':
+        todo = get_object_or_404(Todo, id=pk, user=request.user)
+        todo.pk = None
+        todo.date_completion = None
+        todo.save()
         return redirect('current_todos')
